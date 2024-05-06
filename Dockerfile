@@ -1,7 +1,7 @@
 FROM node:14-alpine
 #chuẩn bị môi trường node.js, version node14/alpine
 
-WORKDIR /hoidanit/backend
+WORKDIR /testlocal/backend
 
 COPY package*.json ./
 

@@ -36,12 +36,22 @@ var getTopDoctorHome = function getTopDoctorHome(limitInput) {
                 model: _index["default"].Allcode,
                 as: 'genderData',
                 attributes: ['valueEn', 'valueVi']
+              }, {
+                model: _index["default"].Doctor_Infor,
+                attributes: ['specialtyId'],
+                include: [{
+                  model: _index["default"].Specialty,
+                  as: 'nameSpecialtyData',
+                  attributes: ['name']
+                }]
               }],
               raw: true,
               nest: true
             });
           case 3:
             users = _context.sent;
+            //let arrSpecialty = users.map((item) => ({ specialtyId: item.doctorIdData.specialtyId }))
+            //console.log('show arr doctor', users[0].Doctor_Infors.nameSpecialtyData.name)
             resolve({
               errCode: 0,
               data: users
@@ -121,19 +131,110 @@ var checkRequiredFields = function checkRequiredFields(inputData) {
 };
 var saveDetailInforDoctor = function saveDetailInforDoctor(inputData) {
   return new Promise( /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(resolve, reject) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(res, rej) {
+      var user, doctorInfor;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            resolve({
-              errCode: 0,
-              errMessage: 'ok'
+            _context3.prev = 0;
+            if (!(!inputData.doctorId || !inputData.contentMarkdown || !inputData.contentHTML || !inputData.selectedPrice || !inputData.selectedPayment || !inputData.selectedProvince || !inputData.nameClinic || !inputData.addressClinic || !inputData.note || !inputData.specialtyId || !inputData.clinicId)) {
+              _context3.next = 5;
+              break;
+            }
+            res({
+              errCode: 1,
+              errMessage: "missing para doctor"
             });
-          case 1:
+            _context3.next = 37;
+            break;
+          case 5:
+            _context3.next = 7;
+            return _index["default"].Markdown.findOne({
+              where: {
+                doctorId: inputData === null || inputData === void 0 ? void 0 : inputData.doctorId
+              },
+              raw: false
+            });
+          case 7:
+            user = _context3.sent;
+            if (!user) {
+              _context3.next = 16;
+              break;
+            }
+            user.contentHTML = inputData.contentHTML;
+            user.contentMarkdown = inputData.contentMarkdown;
+            user.des = inputData.des;
+            _context3.next = 14;
+            return user.save();
+          case 14:
+            _context3.next = 18;
+            break;
+          case 16:
+            _context3.next = 18;
+            return _index["default"].Markdown.create({
+              contentHTML: inputData.contentHTML,
+              contentMarkdown: inputData.contentMarkdown,
+              des: inputData.des,
+              doctorId: inputData.doctorId
+            });
+          case 18:
+            _context3.next = 20;
+            return _index["default"].Doctor_Infor.findOne({
+              where: {
+                doctorId: inputData === null || inputData === void 0 ? void 0 : inputData.doctorId
+              },
+              raw: false
+            });
+          case 20:
+            doctorInfor = _context3.sent;
+            if (!doctorInfor) {
+              _context3.next = 34;
+              break;
+            }
+            //update
+            doctorInfor.priceId = inputData.selectedPrice;
+            doctorInfor.provinceId = inputData.selectedProvince;
+            doctorInfor.paymentId = inputData.selectedPayment;
+            doctorInfor.nameClinic = inputData.nameClinic;
+            doctorInfor.addressClinic = inputData.addressClinic;
+            doctorInfor.note = inputData.note;
+            doctorInfor.specialtyId = inputData.specialtyId;
+            doctorInfor.clinicId = inputData.clinicId;
+            _context3.next = 32;
+            return doctorInfor.save();
+          case 32:
+            _context3.next = 36;
+            break;
+          case 34:
+            _context3.next = 36;
+            return _index["default"].Doctor_Infor.create({
+              doctorId: inputData === null || inputData === void 0 ? void 0 : inputData.doctorId,
+              priceId: inputData.selectedPrice,
+              provinceId: inputData.selectedProvince,
+              paymentId: inputData.selectedPayment,
+              nameClinic: inputData.nameClinic,
+              addressClinic: inputData.addressClinic,
+              note: inputData.note,
+              specialtyId: inputData.specialtyId,
+              clinicId: inputData.clinicId
+            });
+          case 36:
+            res({
+              errCode: 0,
+              data: " infor doctor success"
+            });
+          case 37:
+            _context3.next = 42;
+            break;
+          case 39:
+            _context3.prev = 39;
+            _context3.t0 = _context3["catch"](0);
+            rej(_context3.t0);
+          case 42:
           case "end":
             return _context3.stop();
         }
-      }, _callee3);
+      }, _callee3, null, [[0, 39]]);
     }));
     return function (_x5, _x6) {
       return _ref3.apply(this, arguments);
@@ -224,21 +325,67 @@ var getDetailDoctorById = function getDetailDoctorById(inputId) {
     };
   }());
 };
-var bulkCreateSchedule = function bulkCreateSchedule(data) {
+var bulkCreateSchedule = function bulkCreateSchedule(inputData) {
+  console.log('show dữ liệu vào bulkCreateSchedule', inputData);
   return new Promise( /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(resolve, reject) {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(res, rej) {
+      var ManageSchedule, resultCreateManageSchedule, checkAlreadyExist, result;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
           case 0:
-            resolve({
-              errCode: 0,
-              errMessage: 'ok'
+            _context5.prev = 0;
+            _context5.next = 3;
+            return _index["default"].Schedule.findAll({
+              where: {
+                doctorId: inputData.doctorId,
+                date: inputData.formatedDate.toString()
+              }
+              // attributes: {
+              //     exclude: ['password','image']
+              // }
             });
-          case 1:
+          case 3:
+            ManageSchedule = _context5.sent;
+            resultCreateManageSchedule = inputData.arrSchedule.map(function (item) {
+              return {
+                maxNumber: 10,
+                date: item.date.toString(),
+                timeType: item.timeType,
+                doctorId: item.doctorId
+              };
+            });
+            checkAlreadyExist = function checkAlreadyExist(arr, item) {
+              var check = false;
+              for (var i = 0; i < arr.length; i++) {
+                if (item.timeType === arr[i].timeType) {
+                  check = true;
+                  break;
+                }
+              }
+              return check;
+            };
+            result = resultCreateManageSchedule.filter(function (item) {
+              return checkAlreadyExist(ManageSchedule, item) === false;
+            });
+            console.log("result cuối cùng", result);
+            _context5.next = 10;
+            return _index["default"].Schedule.bulkCreate(result);
+          case 10:
+            res({
+              errCode: 0,
+              data: "succ create  manage schedule"
+            });
+            _context5.next = 16;
+            break;
+          case 13:
+            _context5.prev = 13;
+            _context5.t0 = _context5["catch"](0);
+            rej(_context5.t0);
+          case 16:
           case "end":
             return _context5.stop();
         }
-      }, _callee5);
+      }, _callee5, null, [[0, 13]]);
     }));
     return function (_x9, _x10) {
       return _ref5.apply(this, arguments);
@@ -529,18 +676,61 @@ var getListPatientForDoctor = function getListPatientForDoctor(doctorId, date) {
 var sendRemedy = function sendRemedy(data) {
   return new Promise( /*#__PURE__*/function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(resolve, reject) {
+      var appointment;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
           case 0:
+            _context10.prev = 0;
+            if (!(!data.email || !data.doctorId || !data.patientId || !data.timeType || !data.imgBase64)) {
+              _context10.next = 5;
+              break;
+            }
+            resolve({
+              errCode: 1,
+              errMessage: 'missing required parameters'
+            });
+            _context10.next = 15;
+            break;
+          case 5:
+            _context10.next = 7;
+            return _index["default"].Booking.findOne({
+              where: {
+                doctorId: data.doctorId,
+                patientId: data.patientId,
+                timeType: data.timeType,
+                statusId: 'S2'
+              },
+              raw: false
+            });
+          case 7:
+            appointment = _context10.sent;
+            if (!appointment) {
+              _context10.next = 12;
+              break;
+            }
+            appointment.statusId = 'S3';
+            _context10.next = 12;
+            return appointment.save();
+          case 12:
+            _context10.next = 14;
+            return _emailService["default"].sendAttachment(data);
+          case 14:
             resolve({
               errCode: 0,
-              errMessage: 'ok'
+              errmessage: 'ok'
             });
-          case 1:
+          case 15:
+            _context10.next = 20;
+            break;
+          case 17:
+            _context10.prev = 17;
+            _context10.t0 = _context10["catch"](0);
+            reject(_context10.t0);
+          case 20:
           case "end":
             return _context10.stop();
         }
-      }, _callee10);
+      }, _callee10, null, [[0, 17]]);
     }));
     return function (_x19, _x20) {
       return _ref10.apply(this, arguments);

@@ -33,7 +33,8 @@ module.exports = function (sequelize, DataTypes) {
       function associate(models) {
         // define association here
         Doctor_Infor.belongsTo(models.User, {
-          foreignKey: 'doctorId'
+          foreignKey: 'doctorId',
+          targetKey: 'id'
         });
         Doctor_Infor.belongsTo(models.Allcode, {
           foreignKey: 'priceId',
@@ -49,6 +50,11 @@ module.exports = function (sequelize, DataTypes) {
           foreignKey: 'paymentId',
           targetKey: 'keyMap',
           as: 'paymentTypeData'
+        });
+        Doctor_Infor.belongsTo(models.Specialty, {
+          foreignKey: 'specialtyId',
+          targetKey: 'id',
+          as: 'nameSpecialtyData'
         });
       }
     }]);

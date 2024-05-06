@@ -7,6 +7,7 @@ var _doctorController = _interopRequireDefault(require("../controllers/doctorCon
 var _patientController = _interopRequireDefault(require("../controllers/patientController"));
 var _spcialtyController = _interopRequireDefault(require("../controllers/spcialtyController"));
 var _clinicController = _interopRequireDefault(require("../controllers/clinicController"));
+var _handbookController = _interopRequireDefault(require("../controllers/handbookController"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 var router = _express["default"].Router();
 var initWebRoutes = function initWebRoutes(app) {
@@ -42,6 +43,9 @@ var initWebRoutes = function initWebRoutes(app) {
   router.post('/api/create-new-clinic', _clinicController["default"].createClinic);
   router.get('/api/get-clinic', _clinicController["default"].getAllClinic);
   router.get('/api/get-detail-clinic-by-id', _clinicController["default"].getDetailClinicById);
+  router.post('/api/create-new-hand-book', _handbookController["default"].createHandBook);
+  router.get('/api/get-handbook', _handbookController["default"].getAllHandbook);
+  router.get('/api/get-detail-handbook-by-id', _handbookController["default"].getDetailHandBookById);
   return app.use("/", router);
 };
 module.exports = initWebRoutes;

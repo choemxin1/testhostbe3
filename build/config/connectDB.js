@@ -8,6 +8,7 @@ var _require = require('sequelize'),
   Sequelize = _require.Sequelize;
 require('dotenv').config();
 
+//chạy ở mạng
 // Option 2: Passing parameters separately (other dialects)
 var sequelize = new Sequelize(process.env.DB_DATABASE_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
   host: process.env.DB_HOST,
@@ -25,6 +26,12 @@ var sequelize = new Sequelize(process.env.DB_DATABASE_NAME, process.env.DB_USERN
   },
   timezone: "+07:00"
 });
+//chỉ chậy ở localhost
+// const sequelize = new Sequelize('testlocal', 'root', null, {
+//     host: 'localhost',
+//     dialect: 'mysql',
+//     logging : false 
+//   });
 var connectDB = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     return _regeneratorRuntime().wrap(function _callee$(_context) {

@@ -1,15 +1,39 @@
 const db = require("../models");
 
+
 let createClinic = (data) => {
     return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.name ||
+                !data.imageBase64 ||
+                !data.descriptionHTML ||
+                !data.descriptionMarkdown ||
+                !data.address
+            ) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing parameter from sever clinic'
+                })
+            } else {
+                await db.Clinic.create({
+                    name: data.name,
+                    image: data.imageBase64,
+                    address : data.address,
+                    descriptionHTML: data.descriptionHTML,
+                    descriptionMarkdown: data.descriptionMarkdown
+                })
+                resolve({
+                    errCode: 0,
+                    errMessage: 'create clinic succed'
+                })
+            }
 
-        resolve({
-            errCode: 0,
-            errMessage: 'ok'
-        })
+
+        } catch (e) {
+            reject(e);
+        }
     })
 }
-
 let getAllClinic = () => {
     return new Promise(async (resolve, reject) => {
         try {

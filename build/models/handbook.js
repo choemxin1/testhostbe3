@@ -16,13 +16,13 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Objec
 var _require = require('sequelize'),
   Model = _require.Model;
 module.exports = function (sequelize, DataTypes) {
-  var User = /*#__PURE__*/function (_Model) {
-    function User() {
-      _classCallCheck(this, User);
-      return _callSuper(this, User, arguments);
+  var HandBook = /*#__PURE__*/function (_Model) {
+    function HandBook() {
+      _classCallCheck(this, HandBook);
+      return _callSuper(this, HandBook, arguments);
     }
-    _inherits(User, _Model);
-    return _createClass(User, null, [{
+    _inherits(HandBook, _Model);
+    return _createClass(HandBook, null, [{
       key: "associate",
       value:
       /**
@@ -32,49 +32,18 @@ module.exports = function (sequelize, DataTypes) {
        */
       function associate(models) {
         // define association here
-        User.belongsTo(models.Allcode, {
-          foreignKey: 'positionId',
-          targetKey: 'keyMap',
-          as: 'positionData'
-        });
-        User.belongsTo(models.Allcode, {
-          foreignKey: 'gender',
-          targetKey: 'keyMap',
-          as: 'genderData'
-        });
-        User.hasOne(models.Markdown, {
-          foreignKey: 'doctorId'
-        });
-        User.hasMany(models.Doctor_Infor, {
-          foreignKey: 'doctorId',
-          targetKey: 'id'
-        });
-        User.hasMany(models.Schedule, {
-          foreignKey: 'doctorId',
-          as: 'doctorData'
-        });
-        User.hasMany(models.Booking, {
-          foreignKey: 'patientId',
-          as: 'patientData'
-        });
       }
     }]);
   }(Model);
   ;
-  User.init({
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    address: DataTypes.STRING,
-    phonenumber: DataTypes.STRING,
-    gender: DataTypes.STRING,
-    image: DataTypes.STRING,
-    roleId: DataTypes.STRING,
-    positionId: DataTypes.STRING
+  HandBook.init({
+    name: DataTypes.STRING,
+    descriptionHTML: DataTypes.TEXT('long'),
+    descriptionMarkdown: DataTypes.STRING('long'),
+    image: DataTypes.TEXT
   }, {
     sequelize: sequelize,
-    modelName: 'User'
+    modelName: 'HandBook'
   });
-  return User;
+  return HandBook;
 };

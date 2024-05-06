@@ -11,15 +11,42 @@ var createSpecialty = function createSpecialty(data) {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
+            _context.prev = 0;
+            if (!(!data.name || !data.imageBase64 || !data.descriptionHTML || !data.descriptionMarkdown)) {
+              _context.next = 5;
+              break;
+            }
+            resolve({
+              errCode: 1,
+              errMessage: 'Missing parameter'
+            });
+            _context.next = 8;
+            break;
+          case 5:
+            _context.next = 7;
+            return db.Specialty.create({
+              name: data.name,
+              image: data.imageBase64,
+              descriptionHTML: data.descriptionHTML,
+              descriptionMarkdown: data.descriptionMarkdown
+            });
+          case 7:
             resolve({
               errCode: 0,
-              errMessage: 'ok'
+              errMessage: 'create Specialty succed'
             });
-          case 1:
+          case 8:
+            _context.next = 13;
+            break;
+          case 10:
+            _context.prev = 10;
+            _context.t0 = _context["catch"](0);
+            reject(_context.t0);
+          case 13:
           case "end":
             return _context.stop();
         }
-      }, _callee);
+      }, _callee, null, [[0, 10]]);
     }));
     return function (_x, _x2) {
       return _ref.apply(this, arguments);

@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-
+//chạy ở mạng
 // Option 2: Passing parameters separately (other dialects)
 const sequelize = new Sequelize(
     process.env.DB_DATABASE_NAME,
@@ -29,7 +29,12 @@ const sequelize = new Sequelize(
         timezone: "+07:00"
     }
 );
-
+//chỉ chậy ở localhost
+// const sequelize = new Sequelize('testlocal', 'root', null, {
+//     host: 'localhost',
+//     dialect: 'mysql',
+//     logging : false 
+//   });
 let connectDB = async () => {
     try {
         await sequelize.authenticate();
