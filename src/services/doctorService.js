@@ -117,7 +117,7 @@ let saveDetailInforDoctor = (inputData) => {
                 if (user) {
                     user.contentHTML = inputData.contentHTML;
                     user.contentMarkdown = inputData.contentMarkdown;
-                    user.des = inputData.des;
+                    user.description = inputData.description;
 
                     await user.save();
 
@@ -125,7 +125,7 @@ let saveDetailInforDoctor = (inputData) => {
                     await db.Markdown.create({
                         contentHTML: inputData.contentHTML,
                         contentMarkdown: inputData.contentMarkdown,
-                        des: inputData.des,
+                        description: inputData.description,
                         doctorId: inputData.doctorId,
                     });
 
